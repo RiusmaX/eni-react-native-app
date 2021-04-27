@@ -1,4 +1,4 @@
-package com.exampleapp;
+package com.eni.rnapp;
 
 import com.facebook.react.ReactActivity;
 
