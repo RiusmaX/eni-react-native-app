@@ -24,6 +24,22 @@ const register = async (user) => {
     }
 }
 
+/**
+ * 
+ * @param {*} credentials 
+ * @returns user
+ */
+const login = async (credentials) => {
+    try {
+        const response = await api.post('auth/local', JSON.stringify(credentials))
+        return response.data       
+    } catch (error) {
+        console.error(error)
+        return null
+    }
+}
+
 export {
-    register
+    register,
+    login
 }

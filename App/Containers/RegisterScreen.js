@@ -1,8 +1,7 @@
 import React, { useState } from 'react'
 import { Text, View, TextInput, Button } from 'react-native'
-import AsyncStorage from '@react-native-async-storage/async-storage'
 
-import { register } from '../Services/StrapiApi'
+import { useAuth, registerUser } from '../Contexts/AuthContext'
 
 import styles from './Styles/RegisterScreenStyle'
 
@@ -11,23 +10,15 @@ const RegisterScreen = ({ navigation }) => {
     const [email, setEmail] = useState('test2@test.fr')
     const [password, setPassword] = useState('123456')
 
+    const { dispatch } = useAuth()
+
     const handleSubmit = async () => {
         const user = {
             username,
             email,
             password
         }
-        const response = await register(user)
-        
-        if (response && response.jwt) {
-            try {
-                await AsyncStorage.setItem('token', response.jwt)
-                navigation.navigate('Home')
-            } catch (error) {
-                console.error(error)
-            }
-        }
-
+       registerUser(dispatch, user)
     } 
 
     return (

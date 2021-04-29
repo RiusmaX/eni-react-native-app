@@ -1,11 +1,13 @@
 import React from 'react'
 import { Button, Text, View } from 'react-native'
-import AsyncStorage from '@react-native-async-storage/async-storage'
 
-const ProfileScreen = ({ navigation }) => {
+import { useAuth, actions } from '../Contexts/AuthContext'
+
+const ProfileScreen = () => {
+    const { dispatch } = useAuth()
+
     const logout = async () => {
-        await AsyncStorage.clear()
-        // navigation.navigate('LoginNavigator', {screen: 'Login'} )
+        dispatch({ type: actions.LOGOUT })
     }
     return (
         <View>

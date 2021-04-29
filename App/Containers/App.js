@@ -6,94 +6,61 @@
  * @flow strict-local
  */
 
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import {
   StatusBar,
   useColorScheme,
 } from 'react-native'
-import AsyncStorage from '@react-native-async-storage/async-storage'
+import OneSignal from 'react-native-onesignal'
+import FlashMessage from "react-native-flash-message";
 
-import { NavigationContainer } from '@react-navigation/native'
-import { createStackNavigator } from '@react-navigation/stack'
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import { createDrawerNavigator } from '@react-navigation/drawer'
+import { AuthProvider } from '../Contexts/AuthContext'
 
-import HomeScreen from './HomeScreen'
-import LoginScreen from './LoginScreen'
-import RegisterScreen from './RegisterScreen'
-import ProfileScreen from './ProfileScreen'
-import NotesScreen from './NotesScreen'
-import Modal from './Modal'
-
-const LoginStack = createStackNavigator()
-
-const Home = createBottomTabNavigator()
-
-const Drawer = createDrawerNavigator()
-
-const DrawerNavigator = () => {
-  return (
-    <Drawer.Navigator>
-      <Drawer.Screen name='Home' component={HomeScreen} />
-      <Drawer.Screen name='Profile' component={ProfileScreen} />
-      <Drawer.Screen name='Notes' component={NotesScreen} />
-    </Drawer.Navigator>
-  )
-}
-
-const getToken = async () => {
-  try {
-    const token = await AsyncStorage.getItem('token')
-    if (token) {
-      return token
-    } else {
-      return false
-    }
-  } catch (error) {
-    console.error(error)
-    return false
-  }
-}
+import Navigation from './Navigation'
 
 const App = () => {
   const isDarkMode = useColorScheme() === 'dark'
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
 
   useEffect(() => {
-    const checkToken = async () => {
-      const token = await getToken()
-      if (token) {
-        setIsLoggedIn(true)
-      } else {
-        setIsLoggedIn(false)
-      }
-    }
+     /* O N E S I G N A L   S E T U P */
+     OneSignal.setAppId("a179d01a-6827-440c-9f1d-4b6c56162a65");
+     OneSignal.setLogLevel(6, 0);
+     OneSignal.setRequiresUserPrivacyConsent(false);
+     OneSignal.promptForPushNotificationsWithUserResponse(response => {
+         console.log("Prompt response:", response);
+     });
+     OneSignal.sendTag('userID', '123456789')
 
-    checkToken()
-  }, [])
-
+     /* O N E S I G N A L  H A N D L E R S */
+     OneSignal.setNotificationWillShowInForegroundHandler(notifReceivedEvent => {
+         console.log("OneSignal: notification will show in foreground:", notifReceivedEvent);
+     });
+     OneSignal.setNotificationOpenedHandler(notification => {
+         console.log("OneSignal: notification opened:", notification);
+         if (notification && notification.notification.additionalData) {
+           
+         }
+     });
+     OneSignal.setInAppMessageClickHandler(event => {
+         console.log("OneSignal IAM clicked:", event);
+     });
+     OneSignal.addEmailSubscriptionObserver((event) => {
+         console.log("OneSignal: email subscription changed: ", event);
+     });
+     OneSignal.addSubscriptionObserver(event => {
+         console.log("OneSignal: subscription changed:", event);
+     });
+     OneSignal.addPermissionObserver(event => {
+         console.log("OneSignal: permission changed:", event);
+     });
+}, [])
+  
   return (
-    <NavigationContainer>
-        <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-        {
-          isLoggedIn
-          ? (
-            <Home.Navigator>
-              <Home.Screen name='Home' component={HomeScreen} />
-              <Home.Screen name='Profile' component={ProfileScreen} />
-              <Home.Screen name='Notes' component={NotesScreen} />
-              <Home.Screen name='Drawer' component={DrawerNavigator} />
-            </Home.Navigator>
-          )
-          : (
-            <LoginStack.Navigator initialRouteName='Register'>
-              <LoginStack.Screen name='Login' component={LoginScreen} />
-              <LoginStack.Screen name='Register' component={RegisterScreen} />
-              <LoginStack.Screen name='Modal' component={Modal} options={{ headerShown: false }} />
-            </LoginStack.Navigator>
-          )
-        }
-    </NavigationContainer>
+    <AuthProvider>
+      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
+      <Navigation />
+      <FlashMessage position='top' />
+    </AuthProvider>
   )
 }
 
