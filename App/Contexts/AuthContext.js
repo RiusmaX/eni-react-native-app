@@ -64,6 +64,10 @@ const registerUser = async (dispatch, userData) => {
     }
 }
 
+const logout = async (dispatch) => {
+    dispatch({ type: actions.LOGOUT })
+}
+
 const AuthProvider = ({ children }) => {
     const [state, dispatch] = useReducer(authReducer, initalState)
 
@@ -103,4 +107,10 @@ const useAuth = () => {
     return context
 }
 
-export {AuthProvider, useAuth, actions, loginUser, registerUser}
+export {
+    AuthProvider,
+    useAuth,
+    loginUser, 
+    registerUser,
+    logout
+}
