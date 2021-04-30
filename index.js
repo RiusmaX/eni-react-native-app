@@ -1,6 +1,9 @@
 /**
  * @format
  */
+
+/* global __DEV__ */
+
 import 'react-native-gesture-handler'
 
 import { AppRegistry } from 'react-native'
