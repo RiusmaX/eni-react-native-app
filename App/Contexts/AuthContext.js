@@ -1,3 +1,5 @@
+/* global __DEV__ */
+
 import React, { useEffect, useReducer } from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { showMessage } from 'react-native-flash-message'
@@ -79,7 +81,7 @@ const AuthProvider = ({ children }) => {
     const loadStoredState = async () => {
       dispatch({ type: actions.LOADING, loading: true })
       const storedState = await getStoredState()
-      console.tron.log('LOAD STORED STATE', storedState)
+      __DEV__ && console.tron.log('LOAD STORED STATE', storedState)
       dispatch({ type: actions.LOGIN, loginData: storedState, loading: false })
       showMessage({
         type: 'info',
@@ -92,7 +94,7 @@ const AuthProvider = ({ children }) => {
   // Save current state
   useEffect(() => {
     if (state) {
-      console.tron.log('STORE CURRENT STATE', state)
+      __DEV__ && console.tron.log('STORE CURRENT STATE', state)
       AsyncStorage.setItem('AUTH_CONTEXT:STATE', JSON.stringify({ ...state, loading: false }))
     }
   }, [state])
