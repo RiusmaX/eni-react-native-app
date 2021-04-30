@@ -4,7 +4,7 @@ import styles from './Styles/HeaderStyle'
 
 const Header = ({ color }) => {
   return (
-    <View style={styles.container, {backgroundColor: color}}>
+    <View style={Object.merge(styles.container, { backgroundColor: color })}>
       <Text style={styles.text}>VOICI MON HEADER</Text>
     </View>
   )

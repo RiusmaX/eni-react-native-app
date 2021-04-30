@@ -1,7 +1,7 @@
 const Colors = {
-    primary: 'red'
+  primary: 'red'
 }
 
 export {
-    Colors
+  Colors
 }
