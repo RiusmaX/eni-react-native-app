@@ -35,7 +35,7 @@ const authReducer = (state, action) => {
             return ({ user: loginData.user, jwt: loginData.jwt, loading: loginData.loading })
         case actions.REGISTER:
             const { registerData } = action
-            return ({ user: registerData.user, jwt: registerData.jwt, loading: loginData.loading })
+            return ({ user: registerData.user, jwt: registerData.jwt, loading: registerData.loading })
         case actions.LOADING:
             const { loading } = action
             return ({...state, loading: loading})
@@ -90,7 +90,7 @@ const AuthProvider = ({ children }) => {
     useEffect(() => {
         if (state) {
             console.log('STORE CURRENT STATE', state)
-            AsyncStorage.setItem('AUTH_CONTEXT:STATE', JSON.stringify(state))
+            AsyncStorage.setItem('AUTH_CONTEXT:STATE', JSON.stringify({...state, loading: false}))
         }
     }, [state])
 

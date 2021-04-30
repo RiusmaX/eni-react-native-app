@@ -12,7 +12,7 @@ import HomeScreen from './HomeScreen'
 import LoginScreen from './LoginScreen'
 import RegisterScreen from './RegisterScreen'
 import ProfileScreen from './ProfileScreen'
-import NotesScreen from './NotesScreen'
+import GraphScreen from './GraphScreen'
 import Modal from './Modal'
 import CountScreen from './CountScreen'
 
@@ -29,7 +29,7 @@ const DrawerNavigator = () => {
       <Drawer.Navigator>
         <Drawer.Screen name='Home' component={HomeScreen} />
         <Drawer.Screen name='Profile' component={ProfileScreen} />
-        <Drawer.Screen name='Notes' component={NotesScreen} />
+        <Drawer.Screen name='Graph' component={GraphScreen} />
       </Drawer.Navigator>
     )
   }
@@ -48,10 +48,10 @@ const Navigation = () => {
                 ? <Loader />
                 : user && jwt
                 ? (
-                <Home.Navigator>
+                <Home.Navigator initialRouteName='Graph'>
                     <Home.Screen name='Home' component={HomeScreen} />
                     <Home.Screen name='Profile' component={ProfileScreen} />
-                    <Home.Screen name='Notes' component={NotesScreen} />
+                    <Home.Screen name='Graph' component={GraphScreen} />
                     <Home.Screen name='Drawer' component={DrawerNavigator} />
                 </Home.Navigator>
                 )
